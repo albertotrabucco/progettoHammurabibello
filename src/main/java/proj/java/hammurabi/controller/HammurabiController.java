@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import proj.java.hammurabi.model.Hammurabi;
-import proj.java.hammurabi.model.MockPlayer;
 import proj.java.hammurabi.service.HammurabiService;
 
 import java.util.List;
@@ -25,9 +24,9 @@ public class HammurabiController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<MockPlayer> addHammurabi(@RequestBody MockPlayer mockPlayer){
-        MockPlayer newMockPlayer = hammurabiService.addMockPlayer(mockPlayer);
-        return new ResponseEntity<>(mockPlayer, HttpStatus.OK);
+    public ResponseEntity<Hammurabi> addHammurabi(Hammurabi hammurabi){
+        Hammurabi newHammurabi = hammurabiService.addHammurabi(hammurabi);
+        return new ResponseEntity<>(hammurabi, HttpStatus.OK);
     }
 
     @PutMapping("/update")
