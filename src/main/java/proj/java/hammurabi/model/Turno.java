@@ -3,8 +3,11 @@ package proj.java.hammurabi.model;
 import javax.persistence.*;
 import java.io.Serializable;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @Entity
-public class Hammurabi implements Serializable {
+@Table(name="partita")
+public class Turno implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -13,15 +16,20 @@ public class Hammurabi implements Serializable {
     private int popolazione;
     private int grano;
     private int terreno;
-
-    public Hammurabi() {
+    /*
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ListaPartite_partite")
+    private ListaPartite partita;
+    */
+    public Turno() {
     }
 
-    public Hammurabi(int id, int popolazione, int grano, int terreno) {
+    public Turno(int id, int popolazione, int grano, int terreno/*, ListaPartite partita*/) {
         this.id = id;
         this.popolazione = popolazione;
         this.grano = grano;
         this.terreno = terreno;
+        /*this.partita = partita;*/
     }
 
     public int getId() {
@@ -56,13 +64,23 @@ public class Hammurabi implements Serializable {
         this.terreno = terreno;
     }
 
+    /*public ListaPartite getPartita() {
+        return partita;
+    }
+
+    public void setPartita(ListaPartite partita) {
+        this.partita = partita;
+    }*/
     @Override
     public String toString() {
-        return "Hammurabi{" +
+        return "Turno{" +
                 "id=" + id +
                 ", popolazione=" + popolazione +
                 ", grano=" + grano +
                 ", terreno=" + terreno +
+                /*", partita=" + partita +*/
                 '}';
     }
+
+
 }
