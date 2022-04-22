@@ -50,16 +50,31 @@ public class TurnoService {
         Turno nuovoTurno = new Turno();
         updateTurno(nuovoTurno);
         Turno turnoPrecedente = turnoRepo.findTurnoById(nuovoTurno.getId()-1);
+        //dati per i calcoli
+        int popPrecedente = turnoPrecedente.getPopolazione();
+        int popAngular = valoriAngular.getPopolazione();
+        int grPrecedente = turnoPrecedente.getGrano();
+        int grAngular = valoriAngular.getGrano();
+        int terrPrecedente = turnoPrecedente.getTerreno();
+        int terrAngular = valoriAngular.getTerreno();
+        //calcoli popolazione
+        int resultPop = popPrecedente - popAngular;
+        resultPop = TurnoRepo.eventPlague(resultPop);
+        int finalPop = resultPop + TurnoRepo.popIncreased(resultPop, grPrecedente);
+        //calcoli grano
+        int resultGr = grPrecedente - grAngular;        //grAngular = su angular fare in modo che il
+        resultGr = TurnoRepo.eventRats(resultGr);       // grano usato per comprare terreno e sfamare la pop vengano sommati
+        int finalGr = resultGr + TurnoRepo.granoIncreased(resultGr, popAngular, terrPrecedente,terrAngular);                                  // in un singolo dato prima di essere mandato in post tramite form
+        //calcoli terreno -> non diminuiscono mai
+        int finalTerr = TurnoRepo.terrenoIncreased(terrPrecedente, terrAngular);
+        //set dei nuovi dati
+        nuovoTurno.setPopolazione(finalPop);
+        nuovoTurno.setGrano(finalGr);
+        nuovoTurno.setTerreno(finalTerr);
 
-        nuovoTurno.setPopolazione(((turnoPrecedente.getPopolazione() - valoriAngular.getPopolazione())
-                - TurnoRepo.eventPlague(turnoPrecedente.getPopolazione()))
-                + TurnoRepo.popIncreased(TurnoRepo.eventPlague(turnoPrecedente.getPopolazione()), turnoPrecedente.getGrano()));
-
-        nuovoTurno.setGrano((turnoPrecedente.getGrano() - TurnoRepo.eventRats(turnoPrecedente.getGrano()))
-                + TurnoRepo.granoIncreased(TurnoRepo.eventRats(turnoPrecedente.getGrano()), turnoPrecedente.getPopolazione(), valoriAngular.getTerreno()));
 
 
-        nuovoTurno.setTerreno(turnoPrecedente.getTerreno() + valoriAngular.getTerreno());
+        //nuovoTurno.setTerreno(turnoPrecedente.getTerreno() + valoriAngular.getTerreno());
 
 
         return turnoRepo.save(nuovoTurno);
