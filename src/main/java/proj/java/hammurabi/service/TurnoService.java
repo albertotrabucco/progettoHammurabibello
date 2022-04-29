@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import proj.java.hammurabi.model.Turno;
 import proj.java.hammurabi.repo.TurnoRepo;
 
+import java.util.List;
+
 
 @Service
 public class TurnoService {
@@ -23,6 +25,8 @@ public class TurnoService {
     public Turno findTurnobyId(int id){
         return turnoRepo.findTurnoById(id);
     }
+    
+    public List<Turno> getAllTurni(){return turnoRepo.findAll();}
 
     /*UPDATEDATA()*/
     public Turno updateTurno(Turno turno){
@@ -44,12 +48,12 @@ public class TurnoService {
         return turnoRepo.save(turno);
     }
 
-    //da fare
     //metodo di continue al nuovo turno con utilizzo dei metodi dei vari eventi e incremento e decremento delle risorse
     public Turno nextTurno(Turno valoriAngular) {
         Turno nuovoTurno = new Turno();
         updateTurno(nuovoTurno);
         Turno turnoPrecedente = turnoRepo.findTurnoById(nuovoTurno.getId()-1);
+
         //dati per i calcoli
         int popPrecedente = turnoPrecedente.getPopolazione();
         int popAngular = valoriAngular.getPopolazione();
@@ -57,25 +61,24 @@ public class TurnoService {
         int grAngular = valoriAngular.getGrano();
         int terrPrecedente = turnoPrecedente.getTerreno();
         int terrAngular = valoriAngular.getTerreno();
+
         //calcoli popolazione
         int resultPop = popPrecedente - popAngular;
         resultPop = TurnoRepo.eventPlague(resultPop);
         int finalPop = resultPop + TurnoRepo.popIncreased(resultPop, grPrecedente);
+
         //calcoli grano
         int resultGr = grPrecedente - grAngular;        //grAngular = su angular fare in modo che il
-        resultGr = TurnoRepo.eventRats(resultGr);       // grano usato per comprare terreno e sfamare la pop vengano sommati
+        resultGr = TurnoRepo.eventRats(resultGr);       //grano usato per comprare terreno e sfamare la pop vengano sommati
         int finalGr = resultGr + TurnoRepo.granoIncreased(resultGr, popAngular, terrPrecedente,terrAngular);                                  // in un singolo dato prima di essere mandato in post tramite form
+
         //calcoli terreno -> non diminuiscono mai
         int finalTerr = TurnoRepo.terrenoIncreased(terrPrecedente, terrAngular);
+
         //set dei nuovi dati
         nuovoTurno.setPopolazione(finalPop);
         nuovoTurno.setGrano(finalGr);
         nuovoTurno.setTerreno(finalTerr);
-
-
-
-        //nuovoTurno.setTerreno(turnoPrecedente.getTerreno() + valoriAngular.getTerreno());
-
 
         return turnoRepo.save(nuovoTurno);
     }

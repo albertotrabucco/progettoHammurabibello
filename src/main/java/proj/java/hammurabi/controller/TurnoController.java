@@ -17,6 +17,12 @@ public class TurnoController {
         this.turnoService = turnoService;
     }
 
+    @GetMapping("/all")
+    public List<Turno> getAllTurni(){
+        List<Turno> partita = turnoService.getAllTurni();
+        return partita;
+    }
+
     @GetMapping("/turno/{id}")
     public ResponseEntity<Turno> getTurnobyId(@PathVariable(value = "id") int id){
         Turno turni = turnoService.findTurnobyId(id);

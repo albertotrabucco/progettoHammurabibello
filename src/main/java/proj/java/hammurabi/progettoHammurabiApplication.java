@@ -18,7 +18,7 @@ public class progettoHammurabiApplication {
             SpringApplication.run(progettoHammurabiApplication.class, args);
         }
 
-    /*@Bean
+    @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
@@ -32,7 +32,7 @@ public class progettoHammurabiApplication {
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(urlBasedCorsConfigurationSource);
     }
-    */
+
 }
 
 
