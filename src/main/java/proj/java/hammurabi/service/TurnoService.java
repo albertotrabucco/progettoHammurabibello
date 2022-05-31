@@ -64,13 +64,13 @@ public class TurnoService {
 
         //calcoli popolazione
         int resultPop = popPrecedente - popAngular;
-        resultPop = TurnoRepo.eventPlague(resultPop);
-        int finalPop = resultPop + TurnoRepo.popIncreased(resultPop, grPrecedente);
+        int resultPopEv = TurnoRepo.eventPlague(resultPop);
+        int finalPop = resultPopEv + Math.round(TurnoRepo.popIncreased(resultPop, grPrecedente));
 
         //calcoli grano
         int resultGr = grPrecedente - grAngular;        //grAngular = su angular fare in modo che il
-        resultGr = TurnoRepo.eventRats(resultGr);       //grano usato per comprare terreno e sfamare la pop vengano sommati
-        int finalGr = resultGr + TurnoRepo.granoIncreased(resultGr, popAngular, terrPrecedente,terrAngular);                                  // in un singolo dato prima di essere mandato in post tramite form
+        int resultGrEv = TurnoRepo.eventRats(resultGr);       //grano usato per comprare terreno e sfamare la pop vengano sommati
+        int finalGr = resultGrEv + Math.round(TurnoRepo.granoIncreased(resultGr, terrPrecedente));                                  // in un singolo dato prima di essere mandato in post tramite form
 
         //calcoli terreno -> non diminuiscono mai
         int finalTerr = TurnoRepo.terrenoIncreased(terrPrecedente, terrAngular);
