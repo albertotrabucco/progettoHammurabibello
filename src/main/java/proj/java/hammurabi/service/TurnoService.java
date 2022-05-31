@@ -52,7 +52,7 @@ public class TurnoService {
     public Turno nextTurno(Turno valoriAngular) {
         Turno nuovoTurno = new Turno();
         updateTurno(nuovoTurno);
-        Turno turnoPrecedente = turnoRepo.findTurnoById(nuovoTurno.getId()-1);
+        Turno turnoPrecedente = turnoRepo.findTurnoById(nuovoTurno.getId() - 1);
 
         //dati per i calcoli
         int popPrecedente = turnoPrecedente.getPopolazione();
@@ -67,13 +67,24 @@ public class TurnoService {
         int resultPopEv = TurnoRepo.eventPlague(resultPop);
         int finalPop = resultPopEv + Math.round(TurnoRepo.popIncreased(resultPop, grPrecedente));
 
+        //calcoli terreno -> non diminuiscono mai
+        int finalTerr = 0;
+        if ((terrAngular * 3) <= grPrecedente && (terrAngular * 3) <= grAngular) {
+            finalTerr = terrPrecedente + terrAngular;
+        } else {
+            terrAngular = 0;
+            finalTerr = terrPrecedente + terrAngular;
+        }
+
         //calcoli grano
-        int resultGr = grPrecedente - grAngular;        //grAngular = su angular fare in modo che il
-        int resultGrEv = TurnoRepo.eventRats(resultGr);       //grano usato per comprare terreno e sfamare la pop vengano sommati
+        int resultGr = 0;
+        if(grAngular > grPrecedente){
+            grAngular = grPrecedente;
+        }
+        resultGr = grPrecedente - grAngular;                                                                                        //grAngular = su angular fare in modo che il
+        int resultGrEv = TurnoRepo.eventRats(resultGr);                                                                             //grano usato per comprare terreno e sfamare la pop vengano sommati
         int finalGr = resultGrEv + Math.round(TurnoRepo.granoIncreased(resultGr, terrPrecedente));                                  // in un singolo dato prima di essere mandato in post tramite form
 
-        //calcoli terreno -> non diminuiscono mai
-        int finalTerr = TurnoRepo.terrenoIncreased(terrPrecedente, terrAngular);
 
         //set dei nuovi dati
         nuovoTurno.setPopolazione(finalPop);
